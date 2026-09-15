@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Games Platform</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .game-cover.green   { background: linear-gradient(135deg, #0d3b2e, #1a5c45); }
+.game-cover.blue    { background: linear-gradient(135deg, #1a2a4a, #2a4a7a); }
+.game-cover.purple  { background: linear-gradient(135deg, #2e1a4a, #4a2a7a); }
+.game-cover.pink    { background: linear-gradient(135deg, #3b1a2e, #5c2a45); }
+.game-cover.orange  { background: linear-gradient(135deg, #3b2e1a, #5c4a2a); }
+.game-cover.red     { background: linear-gradient(135deg, #4a1515, #7a2525); }
+.game-cover.cyan    { background: linear-gradient(135deg, #0d3b3b, #1a5c5c); }
+.game-cover.indigo  { background: linear-gradient(135deg, #1a1a4a, #2a2a7a); }
+.game-cover.teal    { background: linear-gradient(135deg, #0d2e3b, #1a4a5c); }
+.game-cover.gold    { background: linear-gradient(135deg, #3b2e0d, #5c4a1a); }
+.game-cover.gray    { background: linear-gradient(135deg, #2a2a2e, #3d3d45); }
+.game-cover.lime    { background: linear-gradient(135deg, #1a3b0d, #2a5c1a); }
+.game-cover.rose    { background: linear-gradient(135deg, #3b1a2a, #5c2a3d); }
+.game-cover.navy    { background: linear-gradient(135deg, #0d1a2e, #1a2a4a); }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0f0f13;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    #menu {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #00ff9d, #00b4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: #888;
+      font-size: 1.05rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .game-card {
+      background: #1a1a22;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      border: 1px solid #2a2a35;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: #00ff9d;
+      box-shadow: 0 12px 28px rgba(0, 255, 157, 0.12);
+    }
+
+    .game-cover {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      position: relative;
+    }
+
+    .game-cover.snake   { background: linear-gradient(135deg, #0d3b2e, #1a5c45); }
+    .game-cover.ttt     { background: linear-gradient(135deg, #1a2a4a, #2a4a7a); }
+    .game-cover.memory  { background: linear-gradient(135deg, #3b1a2e, #5c2a45); }
+    .game-cover.g2048   { background: linear-gradient(135deg, #3b2e1a, #5c4a2a); }
+
+    .game-info {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .game-info p {
+      color: #999;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    #game-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 100;
+      flex-direction: column;
+    }
+
+    #game-header {
+      height: 52px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid #333;
+      flex-shrink: 0;
+    }
+
+    #back-btn {
+      background: #1a1a1a;
+      color: #00ff9d;
+      border: 1px solid #00ff9d;
+      padding: 7px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    #back-btn:hover {
+      background: #00ff9d;
+      color: #000;
+    }
+
+    #game-title {
+      margin-left: 16px;
+      font-size: 1.15rem;
+      color: #ccc;
+    }
+
+    #game-frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menu">
+    <header>
+      <h1>AI Games</h1>
+      <p>Игры на любой вкус</p>
+    </header>
+
+    <div class="games-grid" id="games-list"></div>
+  </div>
+
+  <div id="game-screen">
+    <div id="game-header">
+      <button id="back-btn" onclick="closeGame()">← Назад в меню</button>
+      <div id="game-title"></div>
+    </div>
+    <iframe id="game-frame" src="" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    const games = [
+      {
+        id: "SoulBound",
+        title: "SoulBound",
+        description: "Игра про защиту души",
+        file: "soulbound.html",
+        coverClass: "memory",
+        emoji: "👻"
+      },
+      {
+        id: "Snake",
+        title: "Snake",
+        description: "Обычная змейка",
+        file: "snake.html",
+        coverClass: "snake",
+        emoji: "🐍"
+      },
+      {
+        id: "jumping square",
+        title: "Jumping square",
+        description: "Прыгающий квадрат",
+        file: "jumpingSquare.html",
+        coverClass: "lime",
+        emoji: "🟪"
+      },
+      {
+        id: "DudleJump",
+        title: "DudleJump",
+        description: "Прыгай",
+        file: "dudleJump.html",
+        coverClass: "g2048",
+        emoji: "⏫"
+      },
+      {
+        id: "PinPong",
+        title: "PinPong",
+        description: "Игра в пин понг на двоих",
+        file: "pinpong.html",
+        coverClass: "purple",
+        emoji: "🏓"
+      },
+      {
+        id: "Brick Simulator",
+        title: "Brick Simulator",
+        description: "Симулятор кирпича - философа",
+        file: "brick_simulator.html",
+        coverClass: "navy",
+        emoji: "🧱"
+      },
+      {
+        id: "Chicken War",
+        title: "Chicken War",
+        description: "Бегай, стреляй яйцами, отдыхай",
+        file: "chickenWar.html",
+        coverClass: "teal",
+        emoji: "🐔"
+      },
+      {
+        id: "Iskra",
+        title: "Iskra",
+        description: "Игра про сбор души",
+        file: "iskra.html",
+        coverClass: "indigo",
+        emoji: "✡️"
+      },
+      {
+        id: "Chick",
+        title: "Chick",
+        description: "Игра про защиту души",
+        file: "ckick.html",
+        coverClass: "orange",
+        emoji: "🐤"
+      },
+      {
+        id: "Tic-tak-toe",
+        title: "Tic-tak-toe",
+        description: "Крестики нолики",
+        file: "tic_tak_toe.html",
+        coverClass: "gray",
+        emoji: "❌"
+      },
+      {
+        id: "Billiard",
+        title: "Billiard",
+        description: "Биллиард",
+        file: "billiard.html",
+        coverClass: "gold",
+        emoji: "🎱"
+      },
+      {
+        id: "Crybaby",
+        title: "Crybaby",
+        description: "Плакса",
+        file: "cryBaby.html",
+        coverClass: "lime",
+        emoji: "🟪"
+      }
+    ];
+
+    const gamesList = document.getElementById('games-list');
+
+    games.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.onclick = () => openGame(game);
+
+      card.innerHTML = `
+        <div class="game-cover ${game.coverClass}">${game.emoji}</div>
+        <div class="game-info">
+          <h3>${game.title}</h3>
+          <p>${game.description}</p>
+        </div>
+      `;
+      gamesList.appendChild(card);
+    });
+
+    function openGame(game) {
+      document.getElementById('menu').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'flex';
+      document.getElementById('game-title').textContent = game.title;
+      document.getElementById('game-frame').src = game.file;
+    }
+
+    function closeGame() {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('menu').style.display = 'block';
+      document.getElementById('game-frame').src = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeGame();
+    });
+  </script>
+</body>
+</html>
